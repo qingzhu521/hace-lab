@@ -1,0 +1,386 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram name="教辅 Agent 实现技术架构" id="tutoring-agent-architecture">
+    <mxGraphModel dx="1920" dy="1360" grid="0" gridSize="10" guides="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1360" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="group_interaction" value="" vertex="1" parent="1" style="rounded=1;arcSize=8;absoluteArcSize=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;html=1;fillColor=#F1F6FF;strokeColor=#CDDCF4;strokeWidth=1.4;">
+          <mxGeometry x="50" y="240" width="1300" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="group_context" value="" vertex="1" parent="1" style="rounded=1;arcSize=8;absoluteArcSize=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;html=1;fillColor=#EEFAF7;strokeColor=#C5E4DB;strokeWidth=1.4;">
+          <mxGeometry x="50" y="495" width="1300" height="255" as="geometry" />
+        </mxCell>
+        <mxCell id="group_knowledge" value="" vertex="1" parent="1" style="rounded=1;arcSize=8;absoluteArcSize=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;html=1;fillColor=#F6F2FC;strokeColor=#DED3F0;strokeWidth=1.4;">
+          <mxGeometry x="50" y="850" width="1300" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="group_feedback" value="" vertex="1" parent="1" style="rounded=1;arcSize=8;absoluteArcSize=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;html=1;fillColor=#FFFAF0;strokeColor=#EED7AC;strokeWidth=1.4;">
+          <mxGeometry x="1420" y="240" width="450" height="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:20px&quot;&gt;用户 / 学习者&lt;/b&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#18334B;strokeColor=#18334B;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#FFFFFF;fontSize=20;spacing=9;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="710" y="135" width="290" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:20px&quot;&gt;教辅 Agent&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;题目教学引导 · 知识点问答&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#E1ECFF;strokeColor=#2563EB;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=20;spacing=9;shadow=0;" vertex="1" parent="group_interaction">
+          <mxGeometry x="590" y="50" width="430" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;用户信息读取&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;记忆 · 用户画像 · 知识点掌握程度&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#12877D;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_context">
+          <mxGeometry x="875" y="150" width="370" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;教学知识检索&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;题目 · 教学方案 · Wiki · 依赖树&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#12877D;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_context">
+          <mxGeometry x="295" y="150" width="370" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:20px&quot;&gt;辅导上下文组装&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;当前问题 + 用户信息 + 相关知识&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#D9F2EB;strokeColor=#12877D;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=20;spacing=9;shadow=0;" vertex="1" parent="group_context">
+          <mxGeometry x="590" y="30" width="430" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;原始教学题库&lt;/b&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="250" y="120" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;教学方案&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;自动设计&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;dashed=1;dashPattern=5 3;whiteSpace=wrap;html=1;fillColor=#EBE2FA;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="480" y="120" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;教学方案产出&lt;/b&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="690" y="120" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;知识点自动提炼&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;与 Wiki 生成&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;dashed=1;dashPattern=5 3;whiteSpace=wrap;html=1;fillColor=#EBE2FA;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="920" y="120" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;知识点 Wiki&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;产出&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="1130" y="120" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;对话反馈分析&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;行为提取 · 记忆更新 · 掌握评估&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B87A17;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_feedback">
+          <mxGeometry x="40" y="100" width="370" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;短期记忆&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;当前会话与解题进度&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B87A17;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_feedback">
+          <mxGeometry x="90" y="260" width="310" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;长期记忆&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;历史学习经历与持续性困难&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B87A17;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_feedback">
+          <mxGeometry x="90" y="440" width="310" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;用户画像&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;学习目标与偏好&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B87A17;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_feedback">
+          <mxGeometry x="90" y="620" width="310" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;知识点掌握程度&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;分知识点评估与更新&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B87A17;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_feedback">
+          <mxGeometry x="90" y="800" width="310" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;先修关系自动提取&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;与依赖树构建&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;dashed=1;dashPattern=5 3;whiteSpace=wrap;html=1;fillColor=#EBE2FA;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="765" y="290" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="&lt;div style=&quot;line-height:1.5&quot;&gt;&lt;b style=&quot;font-size:18px&quot;&gt;知识点依赖树产出&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:15px&quot;&gt;先修知识点 → 后续知识点&lt;br&gt;与 Wiki 知识点关联&lt;/span&gt;&lt;/div&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7952C7;strokeWidth=1.5;fontFamily=PingFang SC;fontColor=#18334B;fontSize=18;spacing=9;shadow=0;" vertex="1" parent="group_knowledge">
+          <mxGeometry x="1050" y="280" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.25;exitY=1;exitPerimeter=0;entryX=0.3313953488372093;entryY=0;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="10" target="11" data-label="提问 / 作答">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="101" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.6686046511627907;exitY=0;exitPerimeter=0;entryX=0.75;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="11" target="10" data-label="引导 / 答疑">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="102" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.2558139535;exitY=1;exitPerimeter=0;entryX=0.2558139535;entryY=0;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="11" target="14" data-label="当前问题 / 会话">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="103" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.7441860465;exitY=0;exitPerimeter=0;entryX=0.7441860465;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="14" target="11" data-label="个性化辅导上下文">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="104" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.8;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="12" target="14" data-label="用户上下文">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="628" />
+              <mxPoint x="984" y="628" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="105" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.2;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="13" target="14" data-label="教学上下文">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="628" />
+              <mxPoint x="726" y="628" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="106" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#12877D;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.5;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="15" target="13" data-label="题目">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390" y="800" />
+              <mxPoint x="530" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="107" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#12877D;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.5;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="17" target="13" data-label="教学方案">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="800" />
+              <mxPoint x="530" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="108" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#12877D;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=0;exitPerimeter=0;entryX=0.5;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="19" target="13" data-label="知识点">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1255" y="800" />
+              <mxPoint x="530" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="109" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#7952C7;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="15" target="16" data-label="题库输入">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="110" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#7952C7;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="16" target="17" data-label="自动产出">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="111" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#7952C7;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="17" target="18" data-label="提炼与关联">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="112" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#7952C7;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="18" target="19" data-label="自动产出">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="113" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.6;exitPerimeter=0;entryX=0;entryY=0.2352941176;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="11" target="20" data-label="对话与学习行为">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1390" y="350" />
+              <mxPoint x="1390" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="114" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="20" target="21" data-label="更新">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1645" y="460" />
+              <mxPoint x="1460" y="460" />
+              <mxPoint x="1460" y="542.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="115" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="20" target="22" data-label="沉淀">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1645" y="460" />
+              <mxPoint x="1460" y="460" />
+              <mxPoint x="1460" y="722.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="116" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="20" target="23" data-label="更新">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1645" y="460" />
+              <mxPoint x="1460" y="460" />
+              <mxPoint x="1460" y="902.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="117" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="20" target="24" data-label="评估与更新">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1645" y="460" />
+              <mxPoint x="1460" y="460" />
+              <mxPoint x="1460" y="1082.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="118" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="21" target="12" data-label="读取">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1845" y="542.5" />
+              <mxPoint x="1845" y="1230" />
+              <mxPoint x="1385" y="1230" />
+              <mxPoint x="1385" y="687.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="119" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="22" target="12" data-label="读取">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1845" y="722.5" />
+              <mxPoint x="1845" y="1230" />
+              <mxPoint x="1385" y="1230" />
+              <mxPoint x="1385" y="687.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="120" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="23" target="12" data-label="读取">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1845" y="902.5" />
+              <mxPoint x="1845" y="1230" />
+              <mxPoint x="1385" y="1230" />
+              <mxPoint x="1385" y="687.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="121" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#B87A17;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="24" target="12" data-label="读取">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1845" y="1082.5" />
+              <mxPoint x="1845" y="1230" />
+              <mxPoint x="1385" y="1230" />
+              <mxPoint x="1385" y="687.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="122" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#7952C7;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;jumpStyle=arc;jumpSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="19" target="25" data-label="提取知识点间的先修关系">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1255" y="1090" />
+              <mxPoint x="925" y="1090" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="123" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#7952C7;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;jumpStyle=arc;jumpSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="25" target="26" data-label="自动产出依赖树">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="124" value="" style="edgeStyle=none;noEdgeStyle=1;rounded=0;html=1;strokeColor=#12877D;strokeWidth=2;endArrow=block;endFill=1;endSize=7;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0.5;entryY=1;entryPerimeter=0;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="26" target="13" data-label="知识点依赖关系与学习前置条件">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1368" y="1185" />
+              <mxPoint x="1368" y="800" />
+              <mxPoint x="530" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" value="教辅 Agent 实现技术架构" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=36;fontColor=#18334B;fontStyle=1;spacing=0;">
+          <mxGeometry x="60" y="30" width="1300" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="三层架构 · 自动化知识生产 · 用户行为反馈闭环" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=18;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="62" y="89" width="1250" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="num_interaction" value="01" vertex="1" parent="group_interaction" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=26;fontColor=#2563EB;fontStyle=1;spacing=0;">
+          <mxGeometry x="28" y="24" width="70" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="heading_interaction" value="用户交互层" vertex="1" parent="group_interaction" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=23;fontColor=#18334B;fontStyle=1;spacing=0;">
+          <mxGeometry x="28" y="65" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="desc_interaction" value="题目教学引导&lt;br&gt;知识点问答" vertex="1" parent="group_interaction" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="28" y="110" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="divider_interaction" value="" vertex="1" parent="group_interaction" style="strokeColor=none;fillColor=#CDDCF4;">
+          <mxGeometry x="225" y="25" width="1" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="num_context" value="02" vertex="1" parent="group_context" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=26;fontColor=#12877D;fontStyle=1;spacing=0;">
+          <mxGeometry x="28" y="24" width="70" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="heading_context" value="上下文管理层" vertex="1" parent="group_context" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=23;fontColor=#18334B;fontStyle=1;spacing=0;">
+          <mxGeometry x="28" y="65" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="desc_context" value="融合用户信息&lt;br&gt;与教学知识" vertex="1" parent="group_context" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="28" y="110" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="divider_context" value="" vertex="1" parent="group_context" style="strokeColor=none;fillColor=#C5E4DB;">
+          <mxGeometry x="225" y="25" width="1" height="205" as="geometry" />
+        </mxCell>
+        <mxCell id="num_knowledge" value="03" vertex="1" parent="group_knowledge" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=26;fontColor=#7952C7;fontStyle=1;spacing=0;">
+          <mxGeometry x="28" y="24" width="70" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="heading_knowledge" value="知识库层" vertex="1" parent="group_knowledge" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=23;fontColor=#18334B;fontStyle=1;spacing=0;">
+          <mxGeometry x="28" y="65" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="desc_knowledge" value="题库 · 教学知识&lt;br&gt;知识点依赖树" vertex="1" parent="group_knowledge" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="28" y="110" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="divider_knowledge" value="" vertex="1" parent="group_knowledge" style="strokeColor=none;fillColor=#DED3F0;">
+          <mxGeometry x="225" y="25" width="1" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="feedback_heading" value="用户行为反馈机制" vertex="1" parent="group_feedback" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=24;fontColor=#18334B;fontStyle=1;spacing=0;">
+          <mxGeometry x="30" y="23" width="390" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="feedback_subtitle" value="从对话沉淀用户信息" vertex="1" parent="group_feedback" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="30" y="62" width="390" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ask" value="提问 / 作答" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#2563EB;fontStyle=0;spacing=0;">
+          <mxGeometry x="605" y="204" width="165" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="answer" value="引导 / 答疑" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#2563EB;fontStyle=0;spacing=0;">
+          <mxGeometry x="951" y="204" width="155" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="request" value="当前问题 / 会话" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#2563EB;fontStyle=0;spacing=0;">
+          <mxGeometry x="564" y="451" width="175" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="context_return" value="个性化辅导上下文" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#2563EB;fontStyle=0;spacing=0;">
+          <mxGeometry x="979" y="451" width="215" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="user_ctx_label" value="用户上下文" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#12877D;fontStyle=0;spacing=0;">
+          <mxGeometry x="1125" y="611" width="150" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="kb_ctx_label" value="教学上下文" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#12877D;fontStyle=0;spacing=0;">
+          <mxGeometry x="365" y="611" width="155" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="retrieval_label" value="题库 / 教学方案 / Wiki / 依赖树检索" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#12877D;fontStyle=0;spacing=0;">
+          <mxGeometry x="700" y="765" width="580" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="feedback_in" value="对话与学习行为" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#B87A17;fontStyle=0;spacing=0;">
+          <mxGeometry x="1137" y="315" width="250" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="state_update" value="沉淀 / 更新" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#B87A17;fontStyle=0;spacing=0;">
+          <mxGeometry x="1530" y="433" width="220" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="state_return" value="用户信息回流 · 支持后续辅导" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#B87A17;fontStyle=0;spacing=0;">
+          <mxGeometry x="1500" y="1192" width="330" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="read_label" value="读取" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#B87A17;fontStyle=0;spacing=0;">
+          <mxGeometry x="1310" y="652" width="75" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="knowledge_flow" value="自动化知识流程" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#7952C7;fontStyle=0;spacing=0;">
+          <mxGeometry x="460" y="1080" width="300" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="dependency_note" value="知识点关系：先修 → 后续&lt;br&gt;用于判断前置知识与学习顺序" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=16;fontColor=#7952C7;fontStyle=0;spacing=0;">
+          <mxGeometry x="315" y="1152" width="435" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="kb_j1" value="" vertex="1" parent="1" style="ellipse;fillColor=#12877D;strokeColor=#12877D;">
+          <mxGeometry x="387" y="797" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="kb_j2" value="" vertex="1" parent="1" style="ellipse;fillColor=#12877D;strokeColor=#12877D;">
+          <mxGeometry x="527" y="797" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="kb_j3" value="" vertex="1" parent="1" style="ellipse;fillColor=#12877D;strokeColor=#12877D;">
+          <mxGeometry x="827" y="797" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="fb_update" value="" vertex="1" parent="1" style="ellipse;fillColor=#B87A17;strokeColor=#B87A17;">
+          <mxGeometry x="1457" y="457" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="fb_read1" value="" vertex="1" parent="1" style="ellipse;fillColor=#B87A17;strokeColor=#B87A17;">
+          <mxGeometry x="1842" y="539.5" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="fb_read2" value="" vertex="1" parent="1" style="ellipse;fillColor=#B87A17;strokeColor=#B87A17;">
+          <mxGeometry x="1842" y="719.5" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="fb_read3" value="" vertex="1" parent="1" style="ellipse;fillColor=#B87A17;strokeColor=#B87A17;">
+          <mxGeometry x="1842" y="899.5" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_line_0" edge="1" parent="1" style="endArrow=block;strokeColor=#2563EB;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="1323" as="sourcePoint" />
+            <mxPoint x="114" y="1323" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_text_0" value="交互与上下文" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="127" y="1308" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_line_1" edge="1" parent="1" style="endArrow=block;strokeColor=#12877D;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="1323" as="sourcePoint" />
+            <mxPoint x="554" y="1323" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_text_1" value="知识检索" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="567" y="1308" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_line_2" edge="1" parent="1" style="endArrow=block;strokeColor=#7952C7;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="1323" as="sourcePoint" />
+            <mxPoint x="994" y="1323" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_text_2" value="自动化知识生产" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="1007" y="1308" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_line_3" edge="1" parent="1" style="endArrow=block;strokeColor=#B87A17;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1390" y="1323" as="sourcePoint" />
+            <mxPoint x="1434" y="1323" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_text_3" value="反馈与用户信息回流" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=PingFang SC;fontSize=15;fontColor=#60758A;fontStyle=0;spacing=0;">
+          <mxGeometry x="1447" y="1308" width="330" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

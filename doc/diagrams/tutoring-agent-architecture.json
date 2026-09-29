@@ -1,0 +1,282 @@
+{
+  "title": "教辅 Agent 实现技术架构",
+  "type": "architecture",
+  "layout": "三层水平分区；用户位于顶部；用户行为反馈机制位于右侧，跨层回流",
+  "groups": [
+    {
+      "id": "interaction",
+      "label": "01 用户交互层",
+      "description": "与用户交互，提供题目教学引导与知识点问答"
+    },
+    {
+      "id": "context",
+      "label": "02 上下文管理层",
+      "description": "结合当前问题、用户信息与教学知识，组装辅导上下文"
+    },
+    {
+      "id": "knowledge",
+      "label": "03 知识库层",
+      "description": "保存原始题库、教学方案、知识点 Wiki 和知识点依赖树，通过自动化知识流程完成生产"
+    },
+    {
+      "id": "feedback",
+      "label": "用户行为反馈机制",
+      "description": "从对话沉淀用户信息，并用于后续个性化辅导"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "type": "start",
+      "label": "用户 / 学习者"
+    },
+    {
+      "id": "agent",
+      "type": "process",
+      "group": "interaction",
+      "label": "教辅 Agent\n题目教学引导 · 知识点问答"
+    },
+    {
+      "id": "user_context",
+      "type": "process",
+      "group": "context",
+      "label": "用户信息读取\n记忆 · 用户画像 · 知识点掌握程度"
+    },
+    {
+      "id": "retrieval",
+      "type": "process",
+      "group": "context",
+      "label": "教学知识检索\n题目 · 教学方案 · Wiki · 依赖树"
+    },
+    {
+      "id": "assembly",
+      "type": "process",
+      "group": "context",
+      "label": "辅导上下文组装\n当前问题 + 用户信息 + 相关知识"
+    },
+    {
+      "id": "question_bank",
+      "type": "data",
+      "group": "knowledge",
+      "label": "原始教学题库"
+    },
+    {
+      "id": "plan_workflow",
+      "type": "process",
+      "group": "knowledge",
+      "label": "教学方案自动设计"
+    },
+    {
+      "id": "teaching_plan",
+      "type": "document",
+      "group": "knowledge",
+      "label": "教学方案产出"
+    },
+    {
+      "id": "wiki_workflow",
+      "type": "process",
+      "group": "knowledge",
+      "label": "知识点自动提炼\n与 Wiki 生成"
+    },
+    {
+      "id": "wiki",
+      "type": "document",
+      "group": "knowledge",
+      "label": "知识点 Wiki 产出"
+    },
+    {
+      "id": "feedback_analysis",
+      "type": "process",
+      "group": "feedback",
+      "label": "对话反馈分析\n行为提取 · 记忆更新 · 掌握评估"
+    },
+    {
+      "id": "short_memory",
+      "type": "data",
+      "group": "feedback",
+      "label": "短期记忆\n当前会话与解题进度"
+    },
+    {
+      "id": "long_memory",
+      "type": "data",
+      "group": "feedback",
+      "label": "长期记忆\n历史学习经历与持续性困难"
+    },
+    {
+      "id": "profile",
+      "type": "data",
+      "group": "feedback",
+      "label": "用户画像\n学习目标与偏好"
+    },
+    {
+      "id": "mastery",
+      "type": "data",
+      "group": "feedback",
+      "label": "知识点掌握程度\n分知识点评估与更新"
+    },
+    {
+      "id": "dependency_workflow",
+      "type": "process",
+      "group": "knowledge",
+      "label": "先修关系自动提取\n与依赖树构建"
+    },
+    {
+      "id": "dependency_tree",
+      "type": "data",
+      "group": "knowledge",
+      "label": "知识点依赖树产出\n先修知识点 → 后续知识点\n与 Wiki 知识点关联"
+    }
+  ],
+  "edges": [
+    {
+      "source": "user",
+      "target": "agent",
+      "label": "提问 / 作答",
+      "kind": "interaction"
+    },
+    {
+      "source": "agent",
+      "target": "user",
+      "label": "引导 / 答疑",
+      "kind": "interaction"
+    },
+    {
+      "source": "agent",
+      "target": "assembly",
+      "label": "当前问题 / 会话",
+      "kind": "context"
+    },
+    {
+      "source": "assembly",
+      "target": "agent",
+      "label": "个性化辅导上下文",
+      "kind": "context"
+    },
+    {
+      "source": "user_context",
+      "target": "assembly",
+      "label": "用户上下文",
+      "kind": "context"
+    },
+    {
+      "source": "retrieval",
+      "target": "assembly",
+      "label": "教学上下文",
+      "kind": "context"
+    },
+    {
+      "source": "question_bank",
+      "target": "retrieval",
+      "label": "题目",
+      "kind": "retrieval"
+    },
+    {
+      "source": "teaching_plan",
+      "target": "retrieval",
+      "label": "教学方案",
+      "kind": "retrieval"
+    },
+    {
+      "source": "wiki",
+      "target": "retrieval",
+      "label": "知识点",
+      "kind": "retrieval"
+    },
+    {
+      "source": "question_bank",
+      "target": "plan_workflow",
+      "label": "题库输入",
+      "kind": "production"
+    },
+    {
+      "source": "plan_workflow",
+      "target": "teaching_plan",
+      "label": "自动产出",
+      "kind": "production"
+    },
+    {
+      "source": "teaching_plan",
+      "target": "wiki_workflow",
+      "label": "提炼与关联",
+      "kind": "production"
+    },
+    {
+      "source": "wiki_workflow",
+      "target": "wiki",
+      "label": "自动产出",
+      "kind": "production"
+    },
+    {
+      "source": "agent",
+      "target": "feedback_analysis",
+      "label": "对话与学习行为",
+      "kind": "feedback"
+    },
+    {
+      "source": "feedback_analysis",
+      "target": "short_memory",
+      "label": "更新",
+      "kind": "feedback"
+    },
+    {
+      "source": "feedback_analysis",
+      "target": "long_memory",
+      "label": "沉淀",
+      "kind": "feedback"
+    },
+    {
+      "source": "feedback_analysis",
+      "target": "profile",
+      "label": "更新",
+      "kind": "feedback"
+    },
+    {
+      "source": "feedback_analysis",
+      "target": "mastery",
+      "label": "评估与更新",
+      "kind": "feedback"
+    },
+    {
+      "source": "short_memory",
+      "target": "user_context",
+      "label": "读取",
+      "kind": "feedback"
+    },
+    {
+      "source": "long_memory",
+      "target": "user_context",
+      "label": "读取",
+      "kind": "feedback"
+    },
+    {
+      "source": "profile",
+      "target": "user_context",
+      "label": "读取",
+      "kind": "feedback"
+    },
+    {
+      "source": "mastery",
+      "target": "user_context",
+      "label": "读取",
+      "kind": "feedback"
+    },
+    {
+      "source": "wiki",
+      "target": "dependency_workflow",
+      "label": "提取知识点间的先修关系",
+      "kind": "production"
+    },
+    {
+      "source": "dependency_workflow",
+      "target": "dependency_tree",
+      "label": "自动产出依赖树",
+      "kind": "production"
+    },
+    {
+      "source": "dependency_tree",
+      "target": "retrieval",
+      "label": "知识点依赖关系与学习前置条件",
+      "kind": "retrieval"
+    }
+  ]
+}
