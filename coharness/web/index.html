@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CoHarness · 共同理解每一次修改</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="CoHarness 首页"><span class="brand-mark">co<span>·</span></span><strong>CoHarness</strong><span class="edition">工作预览 01</span></a>
+    <div class="top-actions"><span class="local-indicator" id="sync-status">本地工作区</span><button id="open-workspace">打开目录</button><button id="refresh">刷新修改地图 <span>↻</span></button></div>
+  </header>
+  <div class="workspace" id="workspace">
+    <aside class="map-pane" aria-label="修改地图">
+      <div class="project-label"><span id="project-name">WORKSPACE</span></div>
+      <div class="map-heading"><h2>修改地图</h2><span id="file-count" class="count">—</span></div>
+      <p class="muted small">从目录理解整体，从修改项进入细节。</p>
+      <label class="search"><span>⌕</span><input id="filter" placeholder="查找文件或职责" aria-label="查找文件或职责"><kbd>/</kbd></label>
+      <label class="changes-filter"><input type="checkbox" id="changes-only">只显示变动文件</label>
+      <button id="overview-button" class="overview-button">◈ <span>本次修改概述</span></button>
+      <nav id="tree" aria-label="项目目录"></nav>
+      <div class="map-foot"><span class="dot"></span><span>系统持续检查文件变化<br><small>文件说明来自源码，模型说明待接入</small></span></div>
+    </aside>
+    <main id="main" tabindex="-1"><div class="loading">系统正在读取项目源文件。</div></main>
+    <aside id="context" class="context-pane hidden" aria-label="调用上下文">
+      <div id="resize-handle" role="separator" tabindex="0" aria-label="调整调用面板宽度" aria-orientation="vertical" aria-valuemin="320" aria-valuemax="1000" aria-valuenow="440"></div>
+      <header class="context-header"><span class="eyebrow">CONTEXT / 调用上下文</span><div><button id="zoom-context" title="全屏展开" aria-label="全屏展开">⤢</button><button id="close-context" title="收起面板" aria-label="收起面板">→</button></div></header>
+      <nav id="context-trail" aria-label="调用上下文导航"></nav>
+      <div id="context-content" class="context-content"></div>
+    </aside>
+    <button id="reopen-context" class="context-tab hidden">← 调用上下文</button>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="directory-dialog" aria-labelledby="directory-title">
+    <div class="dialog-heading"><h2 id="directory-title">打开本地目录</h2><button id="close-directory" aria-label="关闭目录选择">×</button></div>
+    <p class="muted small">用户选择的目录将成为当前工作区。系统会为没有 Git 的目录初始化本地仓库。</p>
+    <label for="directory-path">目录路径</label>
+    <div class="directory-input"><input id="directory-path" placeholder="请输入本地目录的完整路径"><button id="browse-directory">查看目录</button></div>
+    <div id="directory-list" aria-label="本地子目录"></div>
+    <p id="directory-error" role="alert"></p>
+    <div class="dialog-footer"><span class="muted small">打开目录不会创建 Git 提交。</span><button id="choose-directory" class="primary">打开此目录</button></div>
+  </dialog>
+</body>
+</html>
