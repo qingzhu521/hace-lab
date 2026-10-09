@@ -1,3 +1,6 @@
 .coharness/
 __pycache__/
 *.pyc
+node_modules/
+plugins/coharness/lib/
+plugins/coharness/*.tgz

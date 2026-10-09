@@ -2,10 +2,11 @@
 
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 import server
-from workspace import Workspace, run_git, safe_path
+from workspace import Workspace, run_git, safe_path, PAGE_BYTES
 
 
 class ParameterTests(unittest.TestCase):
@@ -172,6 +173,65 @@ class WorkspaceTests(unittest.TestCase):
         self.assertFalse(file['editable'])
         self.assertFalse(file['previewable'])
         self.assertEqual(file['kind'], '新增')
+
+    def test_direct_read_ignores_exhausted_batch_and_remains_editable(self):
+        with patch('server.MAX_TOTAL_BYTES', 0):
+            file = self.snapshot()['files'][0]
+        self.assertFalse(file['previewable'])
+        result = self.workspace.read_page({'workspaceId': self.workspace.id, 'path': file['path']})
+        self.assertEqual(result['file']['after'], self.source.read_text())
+        self.assertTrue(result['file']['editable'])
+        self.workspace.save_file({'workspaceId': self.workspace.id, 'path': file['path'],
+                                  'version': result['file']['version'], 'content': 'saved\n'})
+        self.assertEqual(self.source.read_text(), 'saved\n')
+
+    def test_complete_index_and_direct_read_include_files_beyond_preload_limit(self):
+        (self.root / 'z-last.txt').write_text('last file')
+        with patch('server.MAX_FILES', 1):
+            snap = self.snapshot()
+        self.assertEqual(len(snap['files']), 1)
+        self.assertEqual(len(snap['index']), 2)
+        result = self.workspace.read_page({'workspaceId': self.workspace.id, 'path': 'z-last.txt'})
+        self.assertEqual(result['file']['after'], 'last file')
+
+    def test_large_utf8_pages_reconstruct_source_without_lost_bytes(self):
+        content = '中文段落\n' * 50000
+        self.source.write_text(content)
+        payload = {'workspaceId': self.workspace.id, 'path': 'example.py'}
+        chunks = []
+        while True:
+            page = self.workspace.read_page(payload)
+            self.assertFalse(page['file']['editable'])
+            self.assertLessEqual(len(page['file']['after'].encode()), PAGE_BYTES)
+            chunks.append(page['file']['after'])
+            if page['next'] is None:
+                break
+            payload.update(offset=page['next'], revision=page['revision'])
+        self.assertEqual(''.join(chunks), content)
+
+    def test_pages_reject_stale_revision_and_invalid_scope(self):
+        self.source.write_text('x' * 600000)
+        payload = {'workspaceId': self.workspace.id, 'path': 'example.py'}
+        first = self.workspace.read_page(payload)
+        self.source.write_text('y' * 600000)
+        with self.assertRaisesRegex(ValueError, '文件已经变化'):
+            self.workspace.read_page({**payload, 'offset': first['next'], 'revision': first['revision']})
+        for bad in ({'workspaceId': 'old'}, {'path': '../outside'}, {'offset': -1}):
+            with self.assertRaises(ValueError):
+                self.workspace.read_page({**payload, **bad})
+        (self.root / 'link').symlink_to(self.source)
+        with self.assertRaises(ValueError):
+            self.workspace.read_page({**payload, 'path': 'link'})
+        (self.root / '.gitignore').write_text('secret.txt\n')
+        (self.root / 'secret.txt').write_text('ignored')
+        with self.assertRaisesRegex(ValueError, '移出工作区'):
+            self.workspace.read_page({**payload, 'path': 'secret.txt'})
+
+    def test_direct_read_explains_binary_and_encoding_limits(self):
+        for data in (b'\x00binary', b'\xff\xfe'):
+            self.source.write_bytes(data)
+            with self.assertRaises(ValueError):
+                self.workspace.read_page({'workspaceId': self.workspace.id, 'path': 'example.py'})
 
 
 if __name__ == '__main__':

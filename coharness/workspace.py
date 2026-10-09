@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 MAX_FILE_BYTES = 512 * 1024
 MAX_TOTAL_BYTES = 8 * 1024 * 1024
 MAX_FILES = 1000
+PAGE_BYTES = 128 * 1024
 EXCLUDED = {'.git', '.coharness', '.codex', '.agents', 'node_modules', '__pycache__', '.venv', 'venv'}
 
 
@@ -90,8 +91,10 @@ class Workspace:
         self.blobs = {}
         self.store = None
 
-    def inventory(self):
+    def inventory(self, priority=(), limit='default'):
         """系统合并 Git 基准文件和当前工作目录文件。"""
+        if limit == 'default':
+            limit = MAX_FILES
         result = run_git(self.root, 'rev-parse', '--verify', 'HEAD', check=False)
         head = result.stdout.decode().strip() if result.returncode == 0 else None
         entries = {}
@@ -110,8 +113,60 @@ class Workspace:
         names = run_git(self.root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', '.').stdout
         paths = set(entries) | {name.decode(errors='surrogateescape') for name in names.split(b'\0') if name}
         paths = sorted(path for path in paths if not any(part in EXCLUDED for part in PurePosixPath(path).parts))
-        notice = [f'当前仅展示前 {MAX_FILES} 个文件。'] if len(paths) > MAX_FILES else []
-        return head, entries, paths[:MAX_FILES], notice
+        preferred = set(priority)
+        paths.sort(key=lambda path: (path not in preferred, path))
+        notice = [f'系统已预载前 {limit} 个文件。其余文件在打开时读取。'] if limit and len(paths) > limit else []
+        return head, entries, paths[:limit] if limit else paths, notice
+
+    def read_page(self, payload):
+        """系统单独读取当前文件，并对大文本分页。"""
+        if payload.get('workspaceId') != self.id:
+            raise ValueError('工作区已经切换。请重新打开目标文件。')
+        path = payload.get('path')
+        target = safe_path(self.root, path)
+        _, _, paths, _ = self.inventory(priority=[path])
+        if path not in paths:
+            raise ValueError('该文件已移出工作区清单。')
+        offset = payload.get('offset', 0)
+        if type(offset) is not int or offset < 0:
+            raise ValueError('文本位置无效。')
+        if not stat.S_ISREG(target.stat().st_mode):
+            raise ValueError('该项目项不是普通文件。')
+        with os.fdopen(os.open(target, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+            info = os.fstat(stream.fileno())
+            if not stat.S_ISREG(info.st_mode):
+                raise ValueError('该项目项不是普通文件。')
+            signature = (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+            revision = hashlib.sha256(repr(signature).encode()).hexdigest()
+            if offset and payload.get('revision') != revision:
+                raise ValueError('文件已经变化。请重新读取首段。')
+            if offset > info.st_size:
+                raise ValueError('文本位置超出文件范围。')
+            stream.seek(offset)
+            raw = stream.read(PAGE_BYTES if info.st_size > MAX_FILE_BYTES else MAX_FILE_BYTES)
+            end = offset + len(raw)
+            if b'\0' in raw:
+                raise ValueError('该文件包含二进制内容。当前查看器仅支持 UTF-8 文本。')
+            try:
+                text = raw.decode('utf-8')
+            except UnicodeDecodeError as error:
+                if end < info.st_size and error.reason == 'unexpected end of data':
+                    raw = raw[:error.start]
+                    text = raw.decode('utf-8')
+                    end = offset + len(raw)
+                else:
+                    raise ValueError('该文件使用非 UTF-8 编码。当前查看器无法显示正文。') from error
+            after = os.fstat(stream.fileno())
+            if signature != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns):
+                raise ValueError('读取期间文件发生变化。请重新读取首段。')
+        complete = offset == 0 and end == info.st_size
+        label, description, source = source_description(path, text if offset == 0 else '')
+        return {'workspaceId': self.id, 'revision': revision, 'offset': offset,
+                'next': end if end < info.st_size else None, 'end': end, 'size': info.st_size,
+                'file': {'path': path, 'after': text, 'before': '', 'exists': True,
+                         'previewable': True, 'editable': complete, 'version': content_version(raw) if complete else revision,
+                         'label': label, 'description': description, 'descriptionSource': source,
+                         'symbols': [], 'changes': [], 'notice': '', 'partial': not complete}}
 
     def read_file(self, path, entry=None, remaining=MAX_TOTAL_BYTES):
         """系统读取工作内容和对应的 Git 对象。"""
@@ -126,7 +181,7 @@ class Workspace:
             if size > MAX_FILE_BYTES or (entry and entry['size'] > MAX_FILE_BYTES):
                 raise ValueError('文件超过 512 KiB，当前仅显示文件信息。')
             if size + (entry['size'] if entry else 0) > remaining:
-                raise ValueError('本次文本预览已达到 8 MiB 上限。')
+                raise ValueError('该文件尚未预载。用户可在项目空间打开正文。')
             after_bytes = target.read_bytes() if exists else b''
             before_bytes = b''
             if entry:
@@ -155,7 +210,7 @@ class Workspace:
         if not isinstance(text, str) or len(text.encode()) > MAX_FILE_BYTES:
             raise ValueError('编辑器仅支持不超过 512 KiB 的 UTF-8 文本。')
         with self.store.lock:
-            _, entries, paths, _ = self.inventory()
+            _, entries, paths, _ = self.inventory(priority=[path])
             if path not in paths:
                 raise ValueError('该文件已移出工作区清单。')
             current = self.read_file(path, entries.get(path))
