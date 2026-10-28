@@ -90,3 +90,56 @@
 .projectNav{padding:5px 18px;gap:5px;}
 .projectNav button{font-size:11px;padding:5px 10px;}
 .projectNav button[aria-pressed=true]{background:#edf2fa;color:#365d92;}
+
+/* 项目空间的架构演示动画。 */
+.architectureDetail {margin:18px 0 8px;border:1px solid #d5dfd0;border-radius:10px;background:#fafcf8;}
+.architectureDetail > summary {cursor:pointer;padding:12px 18px;font-size:13px;color:#3f5a4a;list-style:none;}
+.architectureDetail > summary::-webkit-details-marker {display:none;}
+.architectureDetail > summary::before {content:'▸';display:inline-block;width:16px;color:#7b9183;}
+.architectureDetail[open] > summary::before {content:'▾';}
+.architectureDetail .architecture {margin:0;border:0;border-top:1px solid #e4eadf;border-radius:0;}
+.architectureDetail .architectureExpanded {border-radius:0;}
+.architectureStory {margin:24px 0;border:1px solid #d5dfd0;border-radius:14px;overflow:hidden;background:linear-gradient(#fbfdf9,#f5f9f2);color:#234034;}
+.storyHeader {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border-bottom:1px solid #e4eadf;flex-wrap:wrap;}
+.storyIdentity {display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.storyIdentity strong {font-size:16px;}
+.storyIdentity span {font-size:11px;color:#6a7f72;}
+.storyControls {display:flex;align-items:center;gap:4px;}
+.storyControls button {border:1px solid #d9e4d8;border-radius:7px;background:#fff;color:#315a3d;padding:5px 10px;min-width:30px;font:inherit;font-size:12px;cursor:pointer;}
+.storyControls button:hover {background:#eef6ea;}
+.storyControls button:disabled {opacity:.35;cursor:default;}
+.storyPlay {min-width:54px;background:#e3eddb;}
+.storyTracks {display:flex;gap:4px;padding:10px 18px 0;flex-wrap:wrap;}
+.storyTracks button {border:0;border-radius:20px;background:transparent;color:#6b7f71;padding:5px 9px;font:inherit;font-size:11px;cursor:pointer;}
+.storyTracks button[aria-pressed=true] {background:#fff;color:#2f5a3e;box-shadow:0 1px 3px #2b4a2b1a;font-weight:600;}
+.storyStage {position:relative;margin:10px 18px 0;border:1px solid #e0e9dc;border-radius:10px;background:radial-gradient(circle at 50% 0%,#fff,#f7faf5);overflow:hidden;padding:4px;}
+.storyStage svg {display:block;width:100%;height:auto;max-height:420px;}
+.storyEmpty {padding:24px;text-align:center;color:#7b8a80;font-size:12px;}
+.storyNode {animation:storyIn .5s ease both;}
+.storyNode rect {fill:#fff;stroke:#cfdcd1;stroke-width:1.2;transition:fill .3s,stroke .3s;}
+.storyNode text {text-anchor:middle;fill:#3c5747;font-family:inherit;}
+.storyNodeName {font-size:12px;font-weight:600;}
+.storyNodeMeta {font-size:10px;fill:#8a9b8f;}
+.storyNodeActive rect {fill:#e6f2e4;stroke:#5b9168;stroke-width:2;}
+.storyNodeDim {opacity:.4;transition:opacity .3s;}
+.storyEdge path {fill:none;stroke:#cad8cd;stroke-width:1.3;stroke-linecap:round;}
+.storyEdgeActive path {stroke:#7aa887;}
+.storyEdgeFlow path {stroke:#3f7c53;stroke-dasharray:6 6;animation:storyFlow 1s linear infinite;}
+.storyArrow {fill:#9ab3a1;}
+.storyCaption {margin:10px 18px 0;padding:12px 14px;border:1px solid #e4eadf;border-radius:10px;background:#fff;min-height:112px;max-height:180px;overflow:auto;}
+.storyEyebrow {font-size:10px;letter-spacing:.04em;color:#7a8d7f;}
+.storyCaption h3 {margin:4px 0 6px;font-size:15px;color:#2d4b38;}
+.storyCaption p {margin:0;font-size:12px;line-height:1.8;color:#4f6658;}
+.storyEvidence {display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.storyEvidence code {font-size:10px;color:#5b7261;background:#f2f7ee;border:1px solid #e2ebdc;border-radius:4px;padding:2px 6px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.storyFooter {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px 14px;color:#7d8e82;font-size:10px;flex-wrap:wrap;}
+.storyDots {display:flex;align-items:center;gap:3px;}
+.storyDots button {display:flex;align-items:center;border:0;background:transparent;padding:3px;cursor:pointer;}
+.storyDots button span {display:block;height:6px;border-radius:99px;background:#ccd9c9;transition:width .2s,background .2s;}
+.storyDots button[aria-pressed=true] span {background:#5b9168;}
+@keyframes storyIn {from {opacity:0;transform:translateY(6px);} to {opacity:1;transform:none;}}
+@keyframes storyFlow {to {stroke-dashoffset:-12;}}
+@media (prefers-reduced-motion: reduce) {
+  .storyNode, .storyEdgeFlow path {animation:none;}
+  .storyNodeDim {opacity:.75;}
+}

@@ -1,6 +1,6 @@
 'use strict';
 
-const state = {space: 'project', spaceViews: new Map(), projectView: 'files', projectDirectory: '', developmentPage: 'current', page: 'task', data: null, file: null, change: 0, expanded: false, trail: [], panelScroll: {}, returnPoint: null, previewDefinition: null, drafts: {}, demo: 0, mode: 'diff', editing: false, editorBuffers: {}, loading: false, collapsedChanges: {}, changeScroll: {}, directoryOpen: new Map()};
+const state = {developmentTimer: null, verificationTimer: null, developmentStarting: false, proposalApplying: false, annotationDrafts: {}, space: 'project', spaceViews: new Map(), projectView: 'files', projectDirectory: '', developmentPage: 'current', page: 'task', data: null, file: null, change: 0, expanded: false, trail: [], panelScroll: {}, returnPoint: null, previewDefinition: null, drafts: {}, demo: 0, mode: 'diff', editing: false, editorBuffers: {}, loading: false, collapsedChanges: {}, changeScroll: {}, directoryOpen: new Map()};
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[character]));
 
@@ -174,6 +174,25 @@ function selectFile(path, index = 0) {
   $('#main').scrollTop = 0;
 }
 
+// 页面把当前需求、文件与修改连成同一条工作链。
+function renderChangeBridge(file, change) {
+  if (!file) return '';
+  const explanation = change ? changeExplanation(file, change, explanationContext(file, change)) : null;
+  const request = String(taskRequest() ?? '').trim();
+  return `<div class="work-bridge">
+    <span class="bridge-stage">${state.space === 'review' ? '审阅' : '开发'}</span>
+    <span class="bridge-task" title="${esc(request || '尚未保存需求')}">${esc(truncateText(request || '尚未保存需求', 64))}</span>
+    <code class="bridge-file" title="${esc(file.path)}">${esc(file.path)}</code>
+    ${explanation ? `<span class="bridge-change">第 ${explanation.position}/${explanation.total} 项 · ${esc(explanation.status)}</span>` : '<span class="bridge-change">文件内容</span>'}
+    <button data-action="${state.space === 'review' ? 'develop-change' : 'review-file'}">${state.space === 'review' ? '在开发空间继续 →' : '打开修改自述 →'}</button>
+  </div>`;
+}
+
+function truncateText(value, length) {
+  const text = String(value ?? '').trim();
+  return text.length > length ? text.slice(0, length - 1) + '…' : text;
+}
+
 // 页面根据当前选择展示概览或修改项。
 function renderMain() {
   $('#main').classList.remove('definition-open');
@@ -185,12 +204,15 @@ function renderMain() {
   state.change = Math.min(state.change, Math.max(0, file.changes.length - 1));
   const change = file.changes[state.change];
   const selectedSymbol = state.data.symbols.find(symbol => symbol.id === change?.symbolId);
-  state.reviewToolsOpen ??= false;
+  state.reviewToolsOpen ??= window.innerWidth > 900;
+  const explanation = change ? changeExplanation(file, change, explanationContext(file, change)) : null;
   $('#main').innerHTML = `<div class="editor-shell review-shell">${editorTabs(file)}${renderCommitHeader()}
     <div class="editor-toolbar"><code>${esc(file.path)}</code><span class="badge">${file.kind}</span><div class="toolbar-spacer"></div>
     <button data-action="show-source" class="${state.mode==='source'?'active':''}">源码</button><button data-action="show-diff" class="${state.mode==='diff'?'active':''}" ${!change?'disabled':''}>差异</button>
-    <button data-action="develop-file" ${!file.editable?'disabled':''}>编辑文件</button><button data-action="toggle-review-tools" aria-pressed="${state.reviewToolsOpen}">对齐面板</button></div>
+    <button data-action="develop-file" ${!file.editable?'disabled':''}>在开发空间继续</button><button data-action="toggle-review-tools" aria-pressed="${state.reviewToolsOpen}">修改自述</button></div>
     ${change&&state.mode==='diff'?renderChangeList(file):''}
+    ${change&&state.mode==='diff'?renderChangeBridge(file,change):''}
+    ${change&&state.mode==='diff'&&!state.reviewToolsOpen&&explanation?`<div class="explanation-strip"><span class="eyebrow">修改自述</span><span title="${esc(explanation.summary)}">${esc(explanation.headline)} ${esc(explanation.range)}</span><button data-action="toggle-review-tools">展开自述</button></div>`:''}
     <div class="review-body ${state.reviewToolsOpen&&change&&state.mode==='diff'?'tools-open':''}"><section class="review-code">
     ${state.mode==='source'||!change?renderSource(file):`<div class="code-actions"><button data-action="expand-code">${state.expanded?'仅看修改范围':'查看完整文件'}</button><div class="toolbar-spacer"></div>${selectedSymbol?`<button data-symbol="${esc(selectedSymbol.id)}">调用上下文 · ${esc(selectedSymbol.name)} ↗</button>`:''}</div><div id="diff-target">${renderDiff(file,change)}</div>`}
     </section>${state.reviewToolsOpen&&change&&state.mode==='diff'?reviewTools(file,change,selectedSymbol):''}</div>${editorStatus(file)}</div>`;
@@ -198,6 +220,11 @@ function renderMain() {
   if (editor) editor.addEventListener('input', rememberEditor);
   const input = $('#expectation');
   if (input) input.addEventListener('input', rememberDraft);
+  const annotation = $('#annotation-text');
+  if (annotation) {
+    const selected = selection();
+    if (selected.file && selected.change) annotation.addEventListener('input', () => rememberAnnotationDraft(selected.file, selected.change, annotation.value));
+  }
   const list = $('#change-list');
   if (list) {
     list.scrollTop = state.changeScroll[editorKey(file)] || 0;
@@ -518,6 +545,8 @@ function handleClick(event) {
   if (button.dataset.historyPage !== undefined) return showHistory(Number(button.dataset.historyPage));
   if (button.dataset.restoreTask) return showTaskOperation(button.dataset.restoreTask);
   if (button.dataset.closeFile) return closeFileTab(button.dataset.closeFile);
+  if (button.dataset.reviewFile) return openReviewForFile(button.dataset.reviewFile, Number(button.dataset.reviewChange) || 0);
+  if (button.dataset.verifyScript) return startVerification(button.dataset.verifyScript);
   if (button.dataset.file) return selectFile(button.dataset.file);
   if (button.dataset.change !== undefined) return selectChange(Number(button.dataset.change));
   if (button.dataset.directory) return browseDirectory(button.dataset.directory);
@@ -534,7 +563,18 @@ function handleClick(event) {
     'development-current': () => showDevelopmentPage('current'),
     'development-paused': () => showDevelopmentPage('paused'),
     'review-current': showCurrentReview,
-    'develop-file': () => switchSpace('development', {file: state.file}),
+    'develop-file': openDevelopmentForChange,
+    'develop-change': openDevelopmentForChange,
+    'review-file': () => openReviewForFile(),
+    'focus-expectation': focusExpectation,
+    'dev-start': startDevelopment,
+    'dev-cancel': () => cancelDevelopment(button.dataset.runId),
+    'dev-apply': () => applyDevelopment(button.dataset.proposalId),
+    'dev-discard': () => discardDevelopment(button.dataset.proposalId),
+    'verify-cancel': () => cancelVerification(button.dataset.runId),
+    'git-commit': commitChanges,
+    'save-annotation': saveAnnotation,
+    'annotation-to-requirement': annotationToRequirement,
     'history': () => showHistory(),
     'save-task': () => saveCurrentTask(),
     'pause-task': () => showTaskOperation(),
@@ -644,6 +684,54 @@ async function saveEditor() {
     if ($('#editor-feedback')) $('#editor-feedback').textContent = error.message;
     notify(error.message);
   } finally { state.saving = false; saveEditorDrafts(); }
+}
+
+// 页面在审阅空间打开同一文件和同一修改项。
+function openReviewForFile(path = state.file, index = state.change) {
+  if (!state.data) return;
+  const file = path || state.file;
+  const change = Number.isInteger(index) ? Math.max(0, index) : 0;
+  if (state.space === 'review') {
+    if (state.page === 'history') { state.page = 'task'; state.data = state.liveData; }
+    if (file) selectFile(file, change);
+    else showCurrentReview();
+    return;
+  }
+  switchSpace('review', {reset: true, current: true, ...(file ? {file, change} : {})});
+}
+
+// 页面在开发空间打开同一文件，并定位到修改起始行。
+function openDevelopmentForChange() {
+  const {file, change} = selection();
+  if (!file) return;
+  rememberDraft();
+  const line = change ? Math.max(1, Number(change.start > 0 ? change.start : change.oldStart) || 1) : 0;
+  state.developmentLine = line;
+  switchSpace('development', {file: file.path, change: state.change});
+  if (!line) return;
+  revealDevelopmentLine(line);
+  notify(`系统已在开发空间定位到 L${line}。`);
+}
+
+function revealDevelopmentLine(line) {
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const element = document.querySelector('.live-editor[data-editor-key^="edit:"]');
+    if (!element) return;
+    state.developmentLine = null;
+    if (window.CoEditor.select) window.CoEditor.select(element, line);
+    else window.CoEditor.reveal?.(element, line);
+  }));
+}
+
+function focusExpectation() {
+  state.reviewToolsOpen = true;
+  renderMain();
+  requestAnimationFrame(() => {
+    const input = $('#expectation');
+    if (!input) return;
+    input.focus();
+    input.scrollIntoView({block: 'nearest'});
+  });
 }
 
 // 页面保存草稿后返回工作区概述。

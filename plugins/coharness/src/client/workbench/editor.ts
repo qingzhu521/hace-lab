@@ -62,4 +62,5 @@ function mount(parent:HTMLElement,options:Options) {
 }
 function cleanup(){for(const [element,view]of views)if(!element.isConnected){cached.set(element.dataset.editorKey!,view.state);view.destroy();views.delete(element);}while(cached.size>20)cached.delete(cached.keys().next().value!);}
 function reveal(element:HTMLElement,line:number){const view=views.get(element);if(!view)return;const n=Math.max(1,Math.min(view.state.doc.lines,line-Number(element.dataset.editorStart)+1));view.dispatch({effects:EditorView.scrollIntoView(view.state.doc.line(n).from,{y:'center'})});}
-(window as any).CoEditor={mount,cleanup,reveal};
+function selectLine(element:HTMLElement,line:number){const view=views.get(element);if(!view)return;const n=Math.max(1,Math.min(view.state.doc.lines,line-Number(element.dataset.editorStart)+1));const target=view.state.doc.line(n);view.dispatch({selection:{anchor:target.from},effects:EditorView.scrollIntoView(target.from,{y:'center'})});view.focus();}
+(window as any).CoEditor={mount,cleanup,reveal,select:selectLine};

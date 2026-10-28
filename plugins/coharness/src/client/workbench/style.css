@@ -11,3 +11,142 @@ main{flex:1;min-width:0;min-height:0;overflow:auto;position:relative;background:
 @media(max-width:1000px){.review-body.tools-open{grid-template-columns:minmax(0,1fr) 230px}.map-pane{width:195px}.review-toolbar{flex-wrap:wrap}}
 @media(max-width:720px){.map-pane{width:170px;min-width:140px}.review-body.tools-open{grid-template-columns:minmax(0,1fr)}.review-tools{position:absolute;right:0;top:100px;bottom:24px;width:270px;z-index:6;box-shadow:-5px 0 20px #23354c12}.context-pane{position:absolute;right:0;top:0;bottom:0;width:80vw;z-index:10}.editor-toolbar{flex-wrap:wrap}.editor-status>span:last-child{display:none}.task-page{padding:28px 20px}}
 .editor-tab-wrap{display:flex;align-items:stretch;border-right:1px solid var(--line);flex-shrink:0}.editor-tab-wrap.active{background:#fff;border-top:2px solid #527acc}.editor-tab-wrap .editor-tab{border:0;min-width:80px;margin:0;padding-top:0;background:transparent!important}.close-tab{padding:0 8px 0 2px;border-radius:0;color:#9aa4b4;font-size:14px}.close-tab:hover{color:#405a7b;background:transparent}
+
+/* 开发与审阅共享的工作链。 */
+.work-bridge{display:flex;align-items:center;gap:8px;min-height:30px;padding:4px 12px;border-bottom:1px solid #e7edf3;background:#f7f9fc;color:#748196;font-size:10px;flex-shrink:0;overflow:hidden}
+.bridge-stage{background:#e8eef9;color:#2b5fae;border-radius:4px;padding:2px 6px;font-weight:600;white-space:nowrap}
+.bridge-task{max-width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4c5f78}
+.bridge-file{max-width:28%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;color:#7b8798}
+.bridge-change{white-space:nowrap;color:#7c899b}
+.work-bridge button{margin-left:auto;color:#2f63b4;font-size:10px;padding:3px 6px;border:1px solid #dbe4f2;background:#fff;border-radius:4px;white-space:nowrap}
+.work-bridge button:hover{background:#edf3ff}
+
+/* 修改自述直接解释每一处差异。 */
+.change-explanation{padding:14px;border-bottom:1px solid var(--line);background:#fff}
+.change-explanation>header{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:8px}
+.change-explanation h2{font-size:12px;line-height:1.6;font-weight:600;margin-top:2px;color:#2f4059}
+.explanation-summary{font-size:11px;line-height:1.8;color:#4c5c72;margin-bottom:10px}
+.explanation-facts{display:grid;gap:5px;margin:0 0 10px;padding:8px 10px;background:#f7f9fc;border-radius:5px}
+.explanation-facts div{display:flex;gap:8px;font-size:10px}
+.explanation-facts dt{color:#8a95a5;min-width:52px;flex-shrink:0}
+.explanation-facts dd{margin:0;color:#53647b;overflow-wrap:anywhere}
+.explanation-excerpt{margin:6px 0;border:1px solid #e6ebf1;border-radius:4px;overflow:hidden}
+.explanation-excerpt summary{cursor:pointer;padding:5px 8px;font-size:10px;color:#617089;background:#fafbfc}
+.explanation-excerpt pre{margin:0;max-height:140px;overflow:auto;padding:8px;font:10px/1.7 Consolas,monospace;white-space:pre;background:#fff}
+.explanation-excerpt.added summary{background:#f2faf4;color:#35704c}
+.explanation-callers{margin:6px 0;border:1px solid #e6ebf1;border-radius:4px;background:#fff}
+.explanation-callers summary{cursor:pointer;padding:5px 8px;font-size:10px;color:#617089;background:#fafbfc}
+.explanation-callers ul{margin:0;padding:6px 8px 8px 24px;font-size:10px;line-height:1.8;color:#53647b}
+.explanation-callers code{color:#8a95a5;margin-right:4px}
+.explanation-excerpt.removed summary{background:#fff5f4;color:#a2504a}
+.excerpt-line{display:block}
+.excerpt-line b{display:inline-block;min-width:34px;margin-right:8px;color:#a3acb9;font-weight:400;text-align:right}
+.explanation-intent,.explanation-next{margin-top:10px}
+.explanation-intent h3,.explanation-next h3{font-size:10px;color:#7c899b;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.explanation-intent p{font-size:10px;line-height:1.7;color:#53647b;margin-bottom:3px}
+.explanation-label{display:inline-block;margin-right:5px;color:#8a95a5}
+.explanation-next ul{margin:0;padding-left:16px;font-size:10px;line-height:1.8;color:#53647b}
+.explanation-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.explanation-actions button{font-size:10px;padding:4px 7px}
+.explanation-actions .primary{background:#2563eb;color:#fff}
+.change-explanation .note{padding:8px 0 0;font-size:10px}
+.explanation-strip{display:flex;align-items:center;gap:8px;padding:5px 12px;border-bottom:1px solid #e8edf4;background:#fbfcfe;font-size:10px;color:#687790;flex-shrink:0}
+.explanation-strip>span:nth-child(2){flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.explanation-strip button{font-size:10px;color:#2f63b4}
+.review-tools>.change-explanation{padding:14px}
+.review-tools .alignment{border-top:1px solid var(--line)}
+
+/* 开发入口直接列出本次修改。 */
+.change-digest{margin:4px 0 16px;border-top:1px solid var(--line);padding-top:18px}
+.change-digest .section-heading{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.change-digest h2{font-size:13px;color:#3d4f68}
+.change-digest .section-heading>span{font-size:10px;color:#8a95a5}
+.digest-item{padding:12px 0;border-bottom:1px solid #edf0f5}
+.digest-heading{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.digest-heading code{font-size:11px;color:#41546f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.digest-item p{font-size:11px;line-height:1.75;color:#5e6d82}
+.digest-actions{display:flex;gap:6px;margin-top:8px}
+.digest-actions button{font-size:10px;color:#2f63b4;border:1px solid #e2e8f1;background:#fff;padding:3px 7px}
+.digest-actions button:hover{background:#f2f7ff}
+
+/* 自述面板比旧对齐面板更宽，并保持窄屏可用。 */
+.review-body.tools-open{grid-template-columns:minmax(0,1fr) 340px}
+@media(max-width:1000px){.review-body.tools-open{grid-template-columns:minmax(0,1fr) 300px}}
+@media(max-width:720px){.review-body.tools-open{grid-template-columns:minmax(0,1fr)}.bridge-task{max-width:40%}.bridge-file{max-width:34%}}
+
+/* 模型修改方案与运行验证。 */
+.agent-panel,.verify-panel{margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.section-heading h2{font-size:13px;color:#3d4f68}
+.section-heading>span{font-size:10px;color:#8a95a5}
+.agent-start{display:flex;align-items:center;gap:12px;margin-top:12px}
+.agent-start span{font-size:10px;color:#8a94a5}
+.agent-run{margin-top:12px;border:1px solid #dbe6f5;background:#f6f9ff;border-radius:6px;padding:10px 12px}
+.agent-run-head{display:flex;align-items:center;gap:8px;font-size:11px;color:#40536d}
+.agent-run-head span:nth-child(3){margin-left:auto;color:#8a95a5;font-size:10px}
+.agent-run-head button{font-size:10px}
+.agent-run p{font-size:10px;color:#6d7e94;margin-top:5px}
+.agent-pulse{width:7px;height:7px;border-radius:50%;background:#3b82f6;box-shadow:0 0 0 0 #3b82f644;animation:agentPulse 1.4s infinite}
+@keyframes agentPulse{0%{box-shadow:0 0 0 0 #3b82f644}70%{box-shadow:0 0 0 6px #3b82f600}100%{box-shadow:0 0 0 0 #3b82f600}}
+.agent-error{display:flex;align-items:center;gap:10px;margin-top:10px;border:1px solid #f0d8d6;background:#fff7f6;border-radius:5px;padding:9px 11px;font-size:11px;color:#8c4b45}
+.agent-error button{margin-left:auto;font-size:10px}
+.proposal{margin-top:14px;border:1px solid #dfe7f1;border-radius:7px;background:#fbfcfe;padding:12px}
+.proposal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.proposal-head h3{font-size:13px;line-height:1.6;color:#31445d;margin-top:2px}
+.proposal-edits{margin-top:10px;display:grid;gap:8px}
+.proposal-edit{border:1px solid #e6ebf2;border-radius:5px;background:#fff;padding:10px}
+.proposal-edit header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.proposal-edit header code{font-size:11px;color:#3f5571;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proposal-edit p{font-size:10px;line-height:1.75;color:#5c6c81;margin:3px 0}
+.proposal-code{margin:6px 0;border:1px solid #edf0f4;border-radius:4px}
+.proposal-code summary{cursor:pointer;padding:5px 8px;font-size:10px;color:#69798e;background:#fafbfc}
+.proposal-code>div{padding:6px 8px;border-top:1px solid #eef1f5}
+.proposal-code>div>span{display:block;font-size:9px;color:#8a95a5;margin-bottom:3px}
+.proposal-code pre{margin:0;max-height:150px;overflow:auto;font:10px/1.7 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#42546c}
+.proposal-evidence{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.proposal-evidence code{font-size:9px;color:#7b8b9f;background:#f3f6fa;border-radius:3px;padding:2px 5px}
+.proposal-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.proposal-actions button{font-size:11px}
+.verify-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.verify-actions button{font-size:10px;border:1px solid #dfe6ef;background:#fff;padding:4px 8px}
+.verify-run{margin-top:12px;border:1px solid #e4e9f0;border-radius:5px;background:#fafbfc;padding:9px 11px}
+.verify-run-head{display:flex;align-items:center;gap:8px;font-size:10px;color:#6d7d91;flex-wrap:wrap}
+.verify-run-head code{font-size:10px;color:#42566f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:52%}
+.verify-run-head button{margin-left:auto;font-size:10px}
+.verify-passed{background:#e9f7ee;color:#2f7549}
+.verify-failed,.verify-error,.verify-timeout{background:#fff0ef;color:#a2504a}
+.verify-running{background:#eaf1fe;color:#2e60ad}
+.verify-cancelled{background:#f0f2f6;color:#68768a}
+.verify-output{margin-top:6px;border-top:1px solid #edf0f4}
+.verify-output summary{cursor:pointer;font-size:10px;color:#718198;padding-top:6px}
+.verify-output pre{max-height:240px;overflow:auto;margin:6px 0 0;padding:8px;background:#1f2833;color:#dbe4ee;border-radius:4px;font:10px/1.65 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.build-note{color:#2f7549}
+.commit-box{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.commit-box label{display:block;font-size:10px;color:#76859a;margin-bottom:5px}
+.commit-box>div{display:flex;gap:6px}
+.commit-box input{min-width:0;flex:1;border:1px solid #dfe5ee;border-radius:4px;padding:6px 8px;font-size:11px;background:#fff;outline-color:#93b4f2}
+.commit-box button{font-size:10px;white-space:nowrap}
+.commit-box>span{display:block;font-size:10px;color:#8a94a5;margin-top:5px}
+.ai-rationale{margin-top:10px;border:1px solid #d9e6f7;border-left:3px solid #6f9bd8;border-radius:5px;background:#f7faff;padding:10px}
+.ai-rationale.is-stale{border-color:#ead9c2;border-left-color:#c79a52;background:#fffaf1}
+.rationale-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.rationale-head h3{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#6c7f99}
+.ai-rationale p{font-size:10px;line-height:1.75;color:#53657d;margin:3px 0}
+.ai-rationale small{display:block;font-size:9px;color:#8a97a8;margin-top:5px}
+.rationale-evidence{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.rationale-evidence code{font-size:9px;color:#6f8198;background:#eef4fc;border-radius:3px;padding:2px 5px}
+.annotation-box{margin-top:12px;border-top:1px solid #eef1f5;padding-top:10px}
+.annotation-box h3{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#7c899b;margin-bottom:5px}
+.annotation-box textarea{width:100%;min-height:74px;resize:vertical;border:1px solid #dfe5ee;border-radius:4px;padding:8px;font-size:10px;line-height:1.7;background:#fff;outline-color:#93b4f2;display:block}
+.annotation-actions{display:flex;gap:5px;margin-top:6px}
+.annotation-actions button{font-size:10px;padding:4px 7px}
+.annotation-list{margin-top:8px;display:grid;gap:5px}
+.annotation-item{border:1px solid #e8edf3;border-radius:4px;background:#fafbfc;padding:6px 8px}
+.annotation-item time{font-size:9px;color:#94a0af}
+.annotation-item p{font-size:10px;line-height:1.7;color:#4f6177;margin-top:3px}
+.annotation-stale{font-size:9px;color:#b07b34}
+.change-verification{margin-top:12px;border-top:1px solid #eef1f5;padding-top:10px}
+.change-verification h3{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#7c899b;margin-bottom:5px}
+.change-verification p{font-size:10px;color:#5c6c81;margin:3px 0}
+.change-verification small{font-size:9px;color:#8a95a5}
+@media(max-width:720px){.agent-start{flex-wrap:wrap}.commit-box>div{flex-wrap:wrap}.commit-box input{width:100%}}

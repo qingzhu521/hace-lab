@@ -17,7 +17,7 @@ const workbenchPlugin = { name: 'coharness-workbench', setup(builder) {
     const base='src/client/workbench/';
     let html=await readFile(base+'index.html','utf8');
     const css=await readFile(base+'style.css','utf8');
-    const sources=await Promise.all(['bridge.js','spaces.js','reading.js','workflow.js','app.js','editor-layout.js'].map(name=>readFile(base+name,'utf8')));
+    const sources=await Promise.all(['bridge.js','spaces.js','reading.js','explain.js','agent.js','workflow.js','app.js','editor-layout.js'].map(name=>readFile(base+name,'utf8')));
     const code=(editorBundle.outputFiles[0].text+'\n'+sources.join('\n')).replace(/<\/script/gi,'<\\/script');
     html=html.replace(/<link[^>]+>/g,'').replace(/<script[\s\S]*?<\/script>/g,'');
     html=html.replace('</head>',()=>'<style>'+css+'</style></head>').replace('</body>',()=>'<script>'+code+'</script></body>');

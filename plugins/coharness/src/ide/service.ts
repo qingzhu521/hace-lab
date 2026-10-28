@@ -5,12 +5,14 @@ import { defineDomain,domainTable } from '@deepseek-ai/dsh-storage-domain';
 import { ProjectFiles } from './files.ts';
 import { Store } from './store.ts';
 import { IdeWorkspace } from './workspace.ts';
+import { DevelopmentRunner } from './development.ts';
+import { VerificationRunner } from './verification.ts';
 
 export const ideDomain=defineDomain({name:'coharness_ide',version:1,tables:{journal:domainTable(z.object({workspace:z.string(),sequence:z.number().int(),key:z.string(),time:z.string(),kind:z.string(),data:z.any()}))}});
 export async function createIdeService(ctx: Context) {
-  const domain=await ctx.storageDomain.open(ideDomain), workspaces=new Map<string,Promise<IdeWorkspace>>(),locks=new Map<string,Promise<unknown>>();
+  const domain=await ctx.storageDomain.open(ideDomain), workspaces=new Map<string,Promise<IdeWorkspace>>(),locks=new Map<string,Promise<unknown>>(),disposers:Array<()=>void|Promise<void>>=[];
   let closed=false;
-  ctx.effect(()=>async()=>{closed=true;await Promise.allSettled([...locks.values()]);await domain.close();});
+  ctx.effect(()=>async()=>{closed=true;await Promise.allSettled(disposers.map(dispose=>dispose()));await Promise.allSettled([...locks.values()]);await domain.close();});
   return async (payload: any) => {
     if(closed) throw new Error('服务正在关闭。');
     if(!payload||typeof payload.workspaceId!=='string'||typeof payload.route!=='string'||JSON.stringify(payload).length>4*1024*1024) throw new Error('请求格式无效。');
@@ -21,7 +23,11 @@ export async function createIdeService(ctx: Context) {
       const files=new ProjectFiles(selected.path,selected.id);await files.initialize();
       const store=new Store(selected.id,domain.table('journal'));
       await store.importLegacy(process.env.COHARNESS_LEGACY_STATE_DIR,files.root);
-      return new IdeWorkspace(files,store);
+      const workspace=new IdeWorkspace(files,store);
+      workspace.development=new DevelopmentRunner(ctx,files,store);
+      workspace.verification=new VerificationRunner(files,store);
+      disposers.push(()=>workspace.development?.dispose(),()=>workspace.verification?.dispose());
+      return workspace;
     })().catch(error=>{workspaces.delete(key);throw error;}));
     const workspace=await workspaces.get(key)!;
     // 系统按仓库串行执行操作，避免暂存影响另一个目录的保存。

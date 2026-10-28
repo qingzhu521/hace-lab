@@ -135,6 +135,37 @@ export class ProjectFiles {
           ...description(path, offset ? '' : text), symbols: [], changes: [], notice: '', partial: !complete } };
     } finally { await file.close(); }
   }
+  async readForEdit(path: string): Promise<{ exists: boolean; content: string; version: string }> {
+    const current = await this.current(path);
+    return { exists: current.exists, content: decode(current.data), version: version(current.data, current.exists) };
+  }
+  async create(payload: any, record: (key: string, value: any, kind: string) => Promise<void>) {
+    if (typeof payload.content !== 'string' || Buffer.byteLength(payload.content) > MAX_FILE) throw new Error('编辑器仅支持不超过 512 KiB 的 UTF-8 文本。');
+    if (typeof payload.path !== 'string' || !payload.path || !eligible(payload.path)) throw new Error('文件路径超出工作区范围。');
+    const target = await safePath(this.root, payload.path);
+    const parent = dirname(target);
+    const directory = await open(parent, constants.O_RDONLY | constants.O_NOFOLLOW);
+    try { if (!(await directory.stat()).isDirectory()) throw new Error('目标目录不是普通目录。'); } finally { await directory.close(); }
+    const current = await this.current(payload.path);
+    if (current.exists) throw new Error('目标文件已经存在，系统不会覆盖。');
+    await record(`working:${payload.path}:missing`, { path: payload.path, version: 'missing', content: '', workspaceId: this.id }, '创建文件前快照保存');
+    const temporary = resolve(parent, `.coharness-edit-${randomUUID()}`);
+    try {
+      const output = await open(temporary, 'wx', 0o644);
+      try { await output.writeFile(payload.content); await output.sync(); } finally { await output.close(); }
+      const latest = await this.current(payload.path);
+      if (latest.exists) throw new Error('创建期间目标文件已经出现。');
+      await safePath(this.root, payload.path); await rename(temporary, target);
+    } finally { await unlink(temporary).catch(() => {}); }
+    const value = { workspaceId: this.id, path: payload.path, version: version(Buffer.from(payload.content)), previousVersion: 'missing', content: payload.content };
+    await record(`working:${payload.path}:${value.version}`, value, '模型创建文件');
+    return { version: value.version, path: payload.path };
+  }
+  async remove(path: string) {
+    if (!eligible(path)) throw new Error('文件路径超出工作区范围。');
+    const target = await safePath(this.root, path);
+    await unlink(target);
+  }
   async save(payload: any, record: (key: string, value: any, kind: string) => Promise<void>) {
     if (typeof payload.content !== 'string' || Buffer.byteLength(payload.content) > MAX_FILE) throw new Error('编辑器仅支持不超过 512 KiB 的 UTF-8 文本。');
     if (!(await this.inventory([payload.path])).paths.includes(payload.path)) throw new Error('该文件已移出工作区清单。');

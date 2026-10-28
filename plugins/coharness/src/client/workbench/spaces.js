@@ -27,7 +27,7 @@ function rememberSpace() {
 // 页面切换空间，并恢复对应空间的阅读位置。
 function switchSpace(space, options = {}) {
   if (!state.data || !['project', 'development', 'review'].includes(space)) return;
-  if (state.space === space && !options.reset && !options.file) return;
+  if (state.space === space && !options.reset && !options.file && options.change === undefined) return;
   rememberSpace();
   closeReadingEvidence();
   closeContext();
@@ -60,8 +60,9 @@ function switchSpace(space, options = {}) {
   }
   if (space === 'review' && options.current) {
     state.page = 'task'; state.data = state.liveData;
-    state.file = state.data.files.find(file => file.kind !== '未修改')?.path || null;
+    if (!options.file) state.file = state.data.files.find(file => file.kind !== '未修改')?.path || null;
   }
+  if (Number.isInteger(options.change)) state.change = Math.max(0, options.change);
   renderTree(); renderMain();
   if (saved?.contextOpen && state.trail.length) {
     $('#context').classList.remove('hidden'); $('#workspace').classList.add('context-open'); $('#reopen-context').classList.add('hidden');
@@ -265,7 +266,9 @@ function renderDevelopmentFile() {
   const {file}=selection();
   if(!file){state.file=null;renderTaskHome();return;}
   state.editing=Boolean(file.editable);
-  $('#main').innerHTML=`<div class="editor-shell">${editorTabs(file)}<div class="editor-toolbar"><code>${esc(file.path)}</code><div class="toolbar-spacer"></div><button data-action="development-current">当前需求</button><button data-action="review-current">审阅修改</button></div><div class="editor-body">${file.editable?renderEditor(file):projectSource(file)}</div>${editorStatus(file,file.editable)}</div>`;
+  const change=file.changes[Math.min(Math.max(state.change,0),Math.max(0,file.changes.length-1))];
+  const changeIndex=change?file.changes.indexOf(change):0;
+  $('#main').innerHTML=`<div class="editor-shell">${editorTabs(file)}${renderChangeBridge(file,change)}<div class="editor-toolbar"><code>${esc(file.path)}</code>${change?`<span class="badge">第 ${changeIndex+1}/${file.changes.length} 项</span>`:''}<div class="toolbar-spacer"></div><button data-action="development-current">当前需求</button><button data-action="review-file">修改自述</button><button data-action="review-current">审阅修改</button></div><div class="editor-body">${file.editable?renderEditor(file):projectSource(file)}</div>${editorStatus(file,file.editable)}</div>`;
   $('#source-editor')?.addEventListener('input',rememberEditor);
 }
 
@@ -277,7 +280,9 @@ function showDevelopmentPage(page) {
   renderTree(); renderMain(); $('#main').scrollTop = 0;
 }
 
-// 页面打开工作目录的修改集合。
+// 页面打开工作目录的修改集合，并保留用户当前文件。
 function showCurrentReview() {
-  switchSpace('review', {reset: true, current: true});
+  const path = state.space === 'development' ? state.file : null;
+  const change = state.space === 'development' ? state.change : 0;
+  switchSpace('review', {reset: true, current: true, ...(path ? {file: path, change} : {})});
 }

@@ -49,6 +49,17 @@ function restoreTaskView() {
   }
 }
 
+// 页面在开发入口直接解释本次修改。
+function renderChangeDigest() {
+  const files = (state.data.files || []).filter(file => file.kind !== '未修改' && file.changes.length);
+  if (!files.length) return '';
+  const shown = files.slice(0, 8);
+  return `<section class="change-digest" aria-label="本次修改自述"><div class="section-heading"><h2>本次修改 · 系统自述</h2><span>${files.length} 个文件</span></div><p class="note">系统根据实际差异生成说明。用户可以从这里进入审阅，或继续编辑同一文件。</p>${shown.map(file => {
+    const record = recordFor(file, file.changes[0]);
+    return `<article class="digest-item"><div class="digest-heading"><code>${esc(file.path)}</code><span class="badge">${esc(file.kind)}</span></div><p>${esc(fileChangeSummary(file, {record}))}</p><div class="digest-actions"><button data-review-file="${esc(file.path)}" data-review-change="0">审阅自述 →</button><button data-file="${esc(file.path)}">在开发空间打开</button></div></article>`;
+  }).join('')}${files.length > shown.length ? `<p class="note">其余 ${files.length - shown.length} 个文件在审阅空间查看。</p>` : ''}</section>`;
+}
+
 // 页面展示当前任务与真实 Git 状态。
 function renderTaskHome() {
   const {git, workflow} = state.data;
@@ -57,8 +68,10 @@ function renderTaskHome() {
     $('#main').innerHTML = `<div class="task-page"><div class="space-intro"><span class="eyebrow">开发空间</span><h1>暂存任务</h1><p>用户恢复任务后，可以继续开发。</p></div><section class="paused-tasks">${workflow.paused.map(task => `<article><div><strong>${esc(task.request.slice(0, 100) || '未命名任务')}</strong><p>${task.stash ? `代码暂存 ${esc(task.stash.slice(0, 12))}` : '任务记录 · 没有代码暂存'}</p></div><button data-restore-task="${esc(task.id)}" ${active || !git.clean ? 'disabled title="请先暂存当前任务，并清空未提交修改"' : ''}>恢复任务</button></article>`).join('') || '<p class="note">当前项目没有暂存任务。</p>'}</section></div>`;
     return;
   }
-  $('#main').innerHTML = `<div class="task-page"><div class="development-heading"><div><span class="eyebrow">开发空间</span><h1>${active ? '当前任务' : '提出开发需求'}</h1></div><button data-action="pause-task" ${!active && git.clean && !taskRequest().trim() ? 'disabled' : ''}>暂存当前任务</button></div>${active?.error ? `<p class="error-box">${esc(active.error)}</p>` : ''}<section class="task-request-card"><label for="task-request">${active ? '当前任务的预期效果' : '请输入你希望实现的功能'}</label><textarea id="task-request" maxlength="12000" placeholder="描述你希望实现的功能和预期效果。">${esc(taskRequest())}</textarea><div class="task-form-footer"><button class="primary" data-action="save-task">保存需求</button><span id="task-save-status">${active ? '系统已保存当前任务。' : '系统将按项目保存需求。'}</span></div></section><p class="note development-note">当前版本支持需求保存和文件编辑。模型执行尚未接入。</p>${!git.clean ? `<div class="space-link"><span>工作目录包含 ${git.changes.length} 个变动文件。</span><button data-action="review-current">进入审阅空间 →</button></div>` : ''}${renderEvents()}</div>`;
+  $('#main').innerHTML = `<div class="task-page"><div class="development-heading"><div><span class="eyebrow">开发空间</span><h1>${active ? '当前任务' : '提出开发需求'}</h1></div><button data-action="pause-task" ${!active && git.clean && !taskRequest().trim() ? 'disabled' : ''}>暂存当前任务</button></div>${active?.error ? `<p class="error-box">${esc(active.error)}</p>` : ''}<section class="task-request-card"><label for="task-request">${active ? '当前任务的预期效果' : '请输入你希望实现的功能'}</label><textarea id="task-request" maxlength="12000" placeholder="描述你希望实现的功能和预期效果。">${esc(taskRequest())}</textarea><div class="task-form-footer"><button class="primary" data-action="save-task">保存需求</button><span id="task-save-status">${active ? '系统已保存当前任务。' : '系统将按项目保存需求。'}</span></div></section><p class="note development-note">模型修改方案、运行验证和提交都保留用户确认步骤。</p>${renderChangeDigest()}${renderAgentPanel()}${renderVerificationPanel()}${!git.clean ? `<div class="space-link"><span>工作目录包含 ${git.changes.length} 个变动文件。</span><button data-action="review-current">进入审阅空间 →</button></div>` : ''}${renderEvents()}</div>`;
   $('#task-request').addEventListener('input', () => { rememberTaskLocally(); scheduleTaskSave(); });
+  if (developmentState()?.run?.status === 'running' && !state.developmentTimer) pollDevelopment();
+  if (verificationSnapshot().run?.status === 'running' && !state.verificationTimer) pollVerification();
 }
 
 // 页面同步三个空间的选中状态。

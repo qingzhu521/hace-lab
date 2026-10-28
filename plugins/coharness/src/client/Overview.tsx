@@ -4,6 +4,7 @@ import { Button } from '@deepseek-ai/dsh-client-ui-primitives';
 import type { OverviewSnapshot, Source } from '../overview/schema.ts';
 import type {} from './locales.ts';
 import { Architecture } from './Architecture.tsx';
+import { ArchitectureStory } from './ArchitectureStory.tsx';
 import css from './panel.module.css';
 
 export interface OverviewActions {
@@ -68,7 +69,11 @@ export function OverviewPanel({ workspaceId, revision, overview, t }: Props): Re
       <p className={css.badge}>{t('staticOnly')}</p>
       <p className={css.meta}>{t('generatedAt')}: {new Date(run.createdAt).toLocaleString()} · {t('checkedAt')}: {new Date(snapshot!.checkedAt).toLocaleTimeString()}</p>
       {stale.size > 0 && <p role="alert" className={css.warning}>{t('staleOverview')}</p>}
-      <Architecture html={result.architectureHtml} />
+      <ArchitectureStory overview={result} sources={sources} />
+      <details className={css.architectureDetail}>
+        <summary>模型生成的详细架构图</summary>
+        <Architecture html={result.architectureHtml} />
+      </details>
       <article className={css.purpose}><h3>{t('purpose')}</h3><p>{result.purpose.text}</p>{evidence(result.purpose.sourceIds)}</article>
       <h3>{t('modules')}</h3>
       <div className={css.moduleGrid}>{result.modules.map((module, index) => <article key={index} className={css.module}>

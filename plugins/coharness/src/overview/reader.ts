@@ -101,6 +101,39 @@ export class ProjectReader {
     return source;
   }
 
+  async search(query: string, limit = 40, signal?: AbortSignal) {
+    if (typeof query !== 'string' || query.trim().length < 2 || query.length > 200) throw new Error('搜索词需要 2 到 200 个字符。');
+    if (!Number.isInteger(limit) || limit < 1 || limit > 60) throw new Error('搜索数量需要在 1 到 60 之间。');
+    const needle = query.toLowerCase();
+    const matches: Array<{ path: string; line: number; text: string }> = [];
+    let files = 0;
+    let bytes = 0;
+    const walk = async (relative: string): Promise<void> => {
+      signal?.throwIfAborted();
+      const directory = await opendir(await this.locate(relative || '.'));
+      for await (const entry of directory) {
+        if (matches.length >= limit) return;
+        if (!allowed(entry.name) || entry.isSymbolicLink() || (!entry.isDirectory() && !entry.isFile())) continue;
+        const path = relative ? `${relative}/${entry.name}` : entry.name;
+        if (entry.isDirectory()) { await walk(path); continue; }
+        if (files++ >= 500) return;
+        try {
+          const buffer = await this.content(path, signal);
+          bytes += buffer.length;
+          if (bytes > 8 * 1024 * 1024) return;
+          if (buffer.includes(0)) continue;
+          const lines = new TextDecoder('utf-8', { fatal: true }).decode(buffer).split('\n');
+          for (let index = 0; index < lines.length; index++) {
+            if (!lines[index]!.toLowerCase().includes(needle)) continue;
+            matches.push({ path, line: index + 1, text: lines[index]!.trim().slice(0, 240) });
+            if (matches.length >= limit) return;
+          }
+        } catch {}
+      }
+    };
+    await walk('');
+    return { query, matches, truncated: matches.length >= limit };
+  }
   async stalePaths(sources: Source[], signal?: AbortSignal): Promise<string[]> {
     const stale: string[] = [];
     for (const path of new Set(sources.map(source => source.path))) {
